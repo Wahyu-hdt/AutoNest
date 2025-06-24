@@ -142,7 +142,7 @@ class LoginSignup extends StatelessWidget {
                       ),
 
                       // SignUp Router dan Button
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 20),
                       SizedBox(
                         width: double.infinity,
                         height: 56,
