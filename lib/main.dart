@@ -16,10 +16,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'AutoNest',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        // <-- Tambahkan ThemeData di sini
-        fontFamily: 'Lato',
-      ),
+      theme: ThemeData(fontFamily: 'Lato'),
       initialRoute: '/',
       routes: {
         '/': (context) => SplashScreen(),
