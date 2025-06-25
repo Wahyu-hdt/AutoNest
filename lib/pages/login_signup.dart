@@ -68,7 +68,7 @@ class LoginSignup extends StatelessWidget {
                       const Text(
                         'Hello.',
                         style: TextStyle(
-                          fontFamily: 'Lato', // Added Lato
+                          fontFamily: 'Lato',
                           fontSize: 48,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,

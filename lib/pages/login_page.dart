@@ -23,7 +23,7 @@ class LoginPage extends StatelessWidget {
                     IconButton(
                       icon: const Icon(Icons.arrow_back, color: Colors.white),
                       onPressed: () {
-                        Navigator.pop(context, '/loginsignup');
+                        Navigator.pushNamed(context, "/loginsignup");
                       },
                     ),
                     Center(

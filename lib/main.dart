@@ -14,8 +14,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'PRI-App',
+      title: 'AutoNest',
       debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        // <-- Tambahkan ThemeData di sini
+        fontFamily: 'Lato',
+      ),
       initialRoute: '/',
       routes: {
         '/': (context) => SplashScreen(),
