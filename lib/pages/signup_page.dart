@@ -20,8 +20,12 @@ class SignUpPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Icon(Icons.arrow_back, color: Colors.white),
-                    const SizedBox(height: 24),
+                    IconButton(
+                      icon: const Icon(Icons.arrow_back, color: Colors.white),
+                      onPressed: () {
+                        Navigator.pop(context, '/loginsignup');
+                      },
+                    ),
                     Center(
                       child: Image.asset(
                         'assets/images/LogoAutoNest.png',
@@ -55,10 +59,15 @@ class SignUpPage extends StatelessWidget {
               Expanded(
                 child: Container(
                   width: double.infinity,
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 32,
+                  ),
                   decoration: const BoxDecoration(
                     color: containerColor,
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(40)),
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(40),
+                    ),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.white12,
@@ -73,15 +82,9 @@ class SignUpPage extends StatelessWidget {
                         constraints: const BoxConstraints(maxWidth: 400),
                         child: Column(
                           children: [
-                            _buildTextField(
-                              icon: Icons.person,
-                              hint: 'Name',
-                            ),
+                            _buildTextField(icon: Icons.person, hint: 'Name'),
                             const SizedBox(height: 20),
-                            _buildTextField(
-                              icon: Icons.email,
-                              hint: 'Email',
-                            ),
+                            _buildTextField(icon: Icons.email, hint: 'Email'),
                             const SizedBox(height: 20),
                             _buildTextField(
                               icon: Icons.lock,
@@ -108,7 +111,9 @@ class SignUpPage extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(24),
                                     side: const BorderSide(color: Colors.white),
                                   ),
-                                  padding: const EdgeInsets.symmetric(vertical: 16),
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 16,
+                                  ),
                                 ),
                                 child: const Text(
                                   'sign up',
@@ -129,7 +134,11 @@ class SignUpPage extends StatelessWidget {
                                   style: TextStyle(color: Colors.white70),
                                 ),
                                 GestureDetector(
-                                  onTap: () => Navigator.pushNamed(context, '/login'),
+                                  onTap:
+                                      () => Navigator.pushNamed(
+                                        context,
+                                        '/login',
+                                      ),
                                   child: const Text(
                                     'Login',
                                     style: TextStyle(
@@ -165,7 +174,8 @@ class SignUpPage extends StatelessWidget {
       style: const TextStyle(color: Colors.white),
       decoration: InputDecoration(
         prefixIcon: Icon(icon, color: Colors.white),
-        suffixIcon: suffixIcon != null ? Icon(suffixIcon, color: Colors.white) : null,
+        suffixIcon:
+            suffixIcon != null ? Icon(suffixIcon, color: Colors.white) : null,
         hintText: hint,
         hintStyle: const TextStyle(color: Colors.white70),
         enabledBorder: const UnderlineInputBorder(
