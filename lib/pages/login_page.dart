@@ -1,7 +1,132 @@
+import 'package:autonest/service/auth.dart'; // Pastikan path ini benar
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  // TextEditingController untuk setiap input
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  // Memanggil fungsi auth supabase
+  final AuthService _authService = AuthService();
+
+  // State untuk mengelola visibilitas password
+  bool _isPasswordVisible = false;
+
+  // State untuk indikator loading saat proses Login
+  bool _isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    // Pastikan untuk membuang controller saat widget
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  // Fungsi untuk Login
+  Future<void> _signIn() async {
+    final String email = _emailController.text.trim();
+    final String password = _passwordController.text.trim();
+
+    // Validasi Email
+    if (!email.contains('@') || !email.contains('.')) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Please enter a valid email address.'),
+            behavior: SnackBarBehavior.floating,
+            margin: EdgeInsets.only(top: 60.0, left: 20.0, right: 20.0),
+            duration: Duration(seconds: 4),
+            backgroundColor: Colors.red,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            ),
+          ),
+        );
+      }
+      return;
+    }
+
+    // Validasi Password
+    if (password.isEmpty) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Please enter your password.'),
+            behavior: SnackBarBehavior.floating,
+            margin: EdgeInsets.only(top: 60.0, left: 20.0, right: 20.0),
+            duration: Duration(seconds: 4),
+            backgroundColor: Colors.red,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            ),
+          ),
+        );
+      }
+      return;
+    }
+
+    setState(() {
+      _isLoading = true; // Tampilkan indikator loading
+    });
+
+    // Panggil fungsi Login dari AuthService
+    final String? errorMessage = await _authService.Login(email, password);
+
+    if (!mounted) return;
+
+    setState(() {
+      _isLoading = false; // Sembunyikan indikator loading
+    });
+
+    if (errorMessage == null) {
+      // Login berhasil
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Login Successful!'),
+          behavior: SnackBarBehavior.floating,
+          margin: EdgeInsets.only(top: 60.0, left: 20.0, right: 20.0),
+          duration: Duration(seconds: 3),
+          backgroundColor: Colors.green, // Warna untuk sukses
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+        ),
+      );
+      Navigator.pushReplacementNamed(
+        context,
+        '/home',
+      ); // Routing ke halaman utama
+    } else {
+      // Login gagal, tampilkan pesan error
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            errorMessage,
+          ), // Pesan error dari AuthService (Invalid email or password, dll.)
+          behavior: SnackBarBehavior.floating,
+          margin: const EdgeInsets.only(top: 60.0, left: 20.0, right: 20.0),
+          duration: const Duration(seconds: 4),
+          backgroundColor: Colors.red, // Warna untuk error
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,12 +148,13 @@ class LoginPage extends StatelessWidget {
                     IconButton(
                       icon: const Icon(Icons.arrow_back, color: Colors.white),
                       onPressed: () {
-                        Navigator.pushNamed(context, "/loginsignup");
+                        Navigator.pop(context); // Kembali ke halaman sebelumnya
                       },
                     ),
+                    const SizedBox(height: 24),
                     Center(
                       child: Image.asset(
-                        'assets/images/LogoAutoNest.png',
+                        'assets/images/LogoAutoNest.png', // Pastikan path ini benar
                         height: 60,
                       ),
                     ),
@@ -83,19 +209,62 @@ class LoginPage extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            _buildTextField(icon: Icons.email, hint: 'Email'),
+                            //Kolom email
+                            _buildTextField(
+                              icon: Icons.email,
+                              hint: 'Email',
+                              controller:
+                                  _emailController, // Hubungkan controller
+                            ),
                             const SizedBox(height: 20),
+
+                            //Kolom password
                             _buildTextField(
                               icon: Icons.lock,
                               hint: 'Password',
-                              suffixIcon: Icons.visibility_off,
-                              obscureText: true,
+                              controller:
+                                  _passwordController, // Hubungkan controller
+                              obscureText:
+                                  !_isPasswordVisible, // Gunakan state password
+                              suffixIcon:
+                                  _isPasswordVisible
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
+                              onSuffixIconTap: () {
+                                setState(() {
+                                  _isPasswordVisible =
+                                      !_isPasswordVisible; // Ubah state password
+                                });
+                              },
                             ),
                             const SizedBox(height: 8),
                             Align(
                               alignment: Alignment.centerRight,
                               child: TextButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  // TODO: Tambahkan logic untuk Forgot Password
+                                  // Contoh: Navigator.pushNamed(context, '/forgot_password');
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                        'Forgot Password functionality is not yet implemented.',
+                                      ),
+                                      behavior: SnackBarBehavior.floating,
+                                      margin: EdgeInsets.only(
+                                        top: 60.0,
+                                        left: 20.0,
+                                        right: 20.0,
+                                      ),
+                                      duration: Duration(seconds: 3),
+                                      backgroundColor: Colors.orange,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(10),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
                                 child: const Text(
                                   'Forgot Password?',
                                   style: TextStyle(color: Colors.white70),
@@ -106,7 +275,11 @@ class LoginPage extends StatelessWidget {
                             SizedBox(
                               width: double.infinity,
                               child: ElevatedButton(
-                                onPressed: () {},
+                                // Panggil fungsi Login saat tombol ditekan
+                                onPressed:
+                                    _isLoading
+                                        ? null
+                                        : _signIn, // Nonaktifkan tombol saat loading
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.transparent,
                                   elevation: 0,
@@ -118,14 +291,19 @@ class LoginPage extends StatelessWidget {
                                     vertical: 16,
                                   ),
                                 ),
-                                child: const Text(
-                                  'login',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                    letterSpacing: 1,
-                                  ),
-                                ),
+                                child:
+                                    _isLoading
+                                        ? const CircularProgressIndicator(
+                                          color: Colors.white,
+                                        ) // Tampilkan loading
+                                        : const Text(
+                                          'Login',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 16,
+                                            letterSpacing: 1,
+                                          ),
+                                        ),
                               ),
                             ),
                             const SizedBox(height: 40),
@@ -171,16 +349,24 @@ class LoginPage extends StatelessWidget {
   Widget _buildTextField({
     required IconData icon,
     required String hint,
+    TextEditingController? controller,
     bool obscureText = false,
     IconData? suffixIcon,
+    VoidCallback? onSuffixIconTap,
   }) {
     return TextField(
+      controller: controller,
       obscureText: obscureText,
       style: const TextStyle(color: Colors.white),
       decoration: InputDecoration(
         prefixIcon: Icon(icon, color: Colors.white),
         suffixIcon:
-            suffixIcon != null ? Icon(suffixIcon, color: Colors.white) : null,
+            suffixIcon != null
+                ? IconButton(
+                  icon: Icon(suffixIcon, color: Colors.white),
+                  onPressed: onSuffixIconTap,
+                )
+                : null,
         hintText: hint,
         hintStyle: const TextStyle(color: Colors.white70),
         enabledBorder: const UnderlineInputBorder(
