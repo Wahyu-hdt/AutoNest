@@ -1,4 +1,4 @@
-import 'package:autonest/service/auth.dart'; // Pastikan path ini benar
+import 'package:autonest/service/auth.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -99,7 +99,7 @@ class _LoginPageState extends State<LoginPage> {
           behavior: SnackBarBehavior.floating,
           margin: EdgeInsets.only(top: 60.0, left: 20.0, right: 20.0),
           duration: Duration(seconds: 3),
-          backgroundColor: Colors.green, // Warna untuk sukses
+          backgroundColor: Colors.green,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(10)),
           ),
@@ -154,7 +154,7 @@ class _LoginPageState extends State<LoginPage> {
                     const SizedBox(height: 24),
                     Center(
                       child: Image.asset(
-                        'assets/images/LogoAutoNest.png', // Pastikan path ini benar
+                        'assets/images/LogoAutoNest.png',
                         height: 60,
                       ),
                     ),

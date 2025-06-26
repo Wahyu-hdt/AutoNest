@@ -1,4 +1,4 @@
-import 'package:autonest/service/auth.dart'; // Pastikan path ini benar
+import 'package:autonest/service/auth.dart';
 import 'package:flutter/material.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -34,7 +34,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
   @override
   void dispose() {
-    // Pastikan untuk membuang controller saat widget dihapus untuk mencegah memory leak
+    // Pastikan untuk membuang controller saat widget dihapus
     _nameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
@@ -191,7 +191,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     const SizedBox(height: 24),
                     Center(
                       child: Image.asset(
-                        'assets/images/LogoAutoNest.png', // Pastikan path gambar ini benar
+                        'assets/images/LogoAutoNest.png',
                         height: 60,
                       ),
                     ),
