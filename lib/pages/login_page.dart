@@ -13,6 +13,10 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  // Controller untuk Forgot Password
+  final TextEditingController _forgotPasswordEmailController =
+      TextEditingController();
+
   // Memanggil fungsi auth supabase
   final AuthService _authService = AuthService();
 
@@ -32,6 +36,7 @@ class _LoginPageState extends State<LoginPage> {
     // Pastikan untuk membuang controller saat widget
     _emailController.dispose();
     _passwordController.dispose();
+    _forgotPasswordEmailController.dispose();
     super.dispose();
   }
 
@@ -83,7 +88,7 @@ class _LoginPageState extends State<LoginPage> {
     });
 
     // Panggil fungsi Login dari AuthService
-    final String? errorMessage = await _authService.Login(email, password);
+    final String? errorMessage = await _authService.login(email, password);
 
     if (!mounted) return;
 
@@ -107,7 +112,7 @@ class _LoginPageState extends State<LoginPage> {
       );
       Navigator.pushReplacementNamed(
         context,
-        '/home',
+        '/mainwrapper',
       ); // Routing ke halaman utama
     } else {
       // Login gagal, tampilkan pesan error
@@ -126,6 +131,105 @@ class _LoginPageState extends State<LoginPage> {
         ),
       );
     }
+  }
+
+  // Fungsi  Forgot Password
+  Future<void> _showForgotPasswordDialog() async {
+    _forgotPasswordEmailController.clear();
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          backgroundColor: const Color(0xFF232323),
+          title: const Text(
+            'Forgot Password?',
+            style: TextStyle(color: Colors.white),
+          ),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                const Text(
+                  'Enter your email to receive a password reset link.',
+                  style: TextStyle(color: Colors.white70),
+                ),
+                const SizedBox(height: 15),
+                TextField(
+                  controller: _forgotPasswordEmailController,
+                  keyboardType: TextInputType.emailAddress,
+                  style: const TextStyle(color: Colors.white),
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: const Color(0xFF191919),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide.none,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cancel', style: TextStyle(color: Colors.grey)),
+              onPressed: () {
+                Navigator.of(dialogContext).pop();
+              },
+            ),
+            TextButton(
+              child: const Text(
+                'Send Reset Link',
+                style: TextStyle(color: Colors.blue),
+              ),
+              onPressed: () async {
+                final String email = _forgotPasswordEmailController.text.trim();
+                if (email.isEmpty) {
+                  // Tampilkan snackbar di dalam dialog jika email kosong
+                  ScaffoldMessenger.of(dialogContext).showSnackBar(
+                    const SnackBar(content: Text('Please enter your email.')),
+                  );
+                  return;
+                }
+
+                Navigator.of(dialogContext).pop();
+
+                setState(() {
+                  _isLoading = true;
+                }); // Tampilkan loading di halaman utama
+                final String? errorMessage = await _authService
+                    .sendPasswordResetEmail(email);
+                setState(() {
+                  _isLoading = false;
+                }); // Sembunyikan loading
+
+                if (mounted) {
+                  if (errorMessage == null) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text(
+                          'Password reset link sent! Check your email.',
+                        ),
+                        backgroundColor: Colors.green,
+                      ),
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          'Failed to send reset link: $errorMessage',
+                        ),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                  }
+                }
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -241,30 +345,8 @@ class _LoginPageState extends State<LoginPage> {
                             Align(
                               alignment: Alignment.centerRight,
                               child: TextButton(
-                                onPressed: () {
-                                  // TODO: Tambahkan logic untuk Forgot Password
-                                  // Contoh: Navigator.pushNamed(context, '/forgot_password');
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text(
-                                        'Forgot Password functionality is not yet implemented.',
-                                      ),
-                                      behavior: SnackBarBehavior.floating,
-                                      margin: EdgeInsets.only(
-                                        top: 60.0,
-                                        left: 20.0,
-                                        right: 20.0,
-                                      ),
-                                      duration: Duration(seconds: 3),
-                                      backgroundColor: Colors.orange,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(10),
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                },
+                                onPressed:
+                                    _showForgotPasswordDialog, // Panggil dialog
                                 child: const Text(
                                   'Forgot Password?',
                                   style: TextStyle(color: Colors.white70),

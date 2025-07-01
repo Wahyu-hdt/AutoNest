@@ -21,10 +21,11 @@ class AuthService {
 
         try {
           await supabase.from('Profil').insert({
-            'profil_id': user.id,
+            'profil_id': user.id, // Menggunakan 'profil_id' sesuai tabel Anda
             'nama': name,
             'email': user.email,
           });
+          debugPrint('Profile for user ${user.id} inserted successfully.');
         } catch (profileError) {
           debugPrint(
             'Error inserting profile for user ${user.id}: $profileError',
@@ -32,7 +33,7 @@ class AuthService {
         }
 
         if (response.session == null) {
-          return "Sign up successful! Please check login";
+          return "Sign up successful! Please check your email for verification if required, then log in.";
         } else {
           return null; // Sukses, tidak ada pesan error
         }
@@ -46,25 +47,36 @@ class AuthService {
     }
   }
 
-  // Fungsi Login (
-  Future<String?> Login(String email, String password) async {
+  // Fungsi Login
+
+  Future<String?> login(String email, String password) async {
     try {
       final AuthResponse response = await supabase.auth.signInWithPassword(
         email: email,
         password: password,
       );
 
-      // Jika Login berhasil dan ada pengguna (sukses)
       if (response.user != null) {
-        return null;
+        return null; // Tidak ada error
       }
 
-      // Jika Login gagal dan ada error
       return "Invalid email or password.";
     } on AuthException catch (e) {
       return e.message;
     } catch (e) {
       return "An unexpected error occurred during login: ${e.toString()}.";
+    }
+  }
+
+  // Fungsi Forgot Password
+  Future<String?> sendPasswordResetEmail(String email) async {
+    try {
+      await supabase.auth.resetPasswordForEmail(email);
+      return null;
+    } on AuthException catch (e) {
+      return e.message;
+    } catch (e) {
+      return "An unexpected error occurred: ${e.toString()}.";
     }
   }
 

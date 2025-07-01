@@ -6,6 +6,10 @@ import 'pages/login_signup.dart';
 import 'pages/home_page.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'snackbar/main_wrapper.dart';
+import 'pages/faq_page.dart';
+import 'pages/bengkel_page.dart';
+import 'pages/profile_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,6 +37,11 @@ class MyApp extends StatelessWidget {
         '/signup': (context) => SignUpPage(),
         '/loginsignup': (context) => LoginSignup(),
         '/home': (context) => HomePage(),
+        '/mainwrapper': (context) => const MainWrapper(),
+
+        '/faq': (context) => const FaqPage(),
+        '/bengkel': (context) => const BengkelPage(),
+        '/profile': (context) => const ProfilePage(),
       },
     );
   }
