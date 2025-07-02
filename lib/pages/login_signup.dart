@@ -30,7 +30,7 @@ class LoginSignup extends StatelessWidget {
                           BlendMode.overlay,
                         ),
                         child: Image.asset(
-                          'assets/images/carimage.png',
+                          'assets/images/carimage_paint.jpg',
                           fit: BoxFit.cover,
                         ),
                       ),

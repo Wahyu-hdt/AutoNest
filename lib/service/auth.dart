@@ -2,7 +2,8 @@ import 'package:flutter/widgets.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AuthService {
-  final supabase = Supabase.instance.client;
+  // setelah Supabase.initialize() dipanggil di main.dart.
+  SupabaseClient get supabase => Supabase.instance.client;
 
   // Fungsi Sign Up
   Future<String?> signup(
@@ -48,7 +49,6 @@ class AuthService {
   }
 
   // Fungsi Login
-
   Future<String?> login(String email, String password) async {
     try {
       final AuthResponse response = await supabase.auth.signInWithPassword(
@@ -72,6 +72,8 @@ class AuthService {
   Future<String?> sendPasswordResetEmail(String email) async {
     try {
       await supabase.auth.resetPasswordForEmail(email);
+      await supabase.auth.resetPasswordForEmail(email);
+
       return null;
     } on AuthException catch (e) {
       return e.message;
