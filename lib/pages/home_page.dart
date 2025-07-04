@@ -23,9 +23,10 @@ class _HomePageState extends State<HomePage> {
         elevation: 0,
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.menu, color: Colors.white),
+          icon: Image.asset('assets/images/hamburg.png', height: 24, width: 24),
           onPressed: () {},
         ),
+
         title: Column(
           children: [
             Row(
@@ -36,11 +37,7 @@ class _HomePageState extends State<HomePage> {
                   style: TextStyle(color: Colors.white, fontSize: 18),
                 ),
                 SizedBox(width: 4),
-                Icon(
-                  Icons.keyboard_arrow_down,
-                  color: Colors.white,
-                  size: 18,
-                ),
+                Icon(Icons.keyboard_arrow_down, color: Colors.white, size: 18),
               ],
             ),
             const Text(
@@ -49,235 +46,279 @@ class _HomePageState extends State<HomePage> {
             ),
           ],
         ),
+        // actions: [
+        //   IconButton(
+        //     icon: const Icon(Icons.person, color: Colors.white),
+        //     onPressed: () {},
+        //   ),
+        // ],
         actions: [
           IconButton(
-            icon: const Icon(Icons.person, color: Colors.white),
+            icon: Image.asset(
+              'assets/images/profil.png',
+              height: 24,
+              width: 24,
+            ),
             onPressed: () {},
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24),
-        child: SingleChildScrollView(
-          child: Center(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 600),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const SizedBox(height: 10),
-                  Stack(
-                    children: [
-                      Positioned(
-                        left: 40,
-                        top: 0,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
-                            Text(
-                              "ALL",
-                              style: TextStyle(
-                                fontSize: 72,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
-                            ),
-                            Text(
-                              "GOOD",
-                              style: TextStyle(
-                                fontSize: 72,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment.center,
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 130),
-                          child: Image.asset(
-                            'assets/images/car.png',
-                            height: screenWidth < 600 ? 200 : 250,
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 24),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const DetailPage(),
-                        ),
-                      );
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Icon(Icons.lock_open, color: Colors.white, size: 18),
-                        SizedBox(width: 8),
-                        Text(
-                          "CHECK STATUS",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            decoration: TextDecoration.underline,
-                          ),
-                        ),
-                        SizedBox(width: 4),
-                        Icon(
-                          Icons.arrow_forward_ios,
-                          color: Colors.white,
-                          size: 14,
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  const Center(
-                    child: Text(
-                      "Updated vehicle status 20/07/2025 2:30 pm",
-                      style: TextStyle(color: Colors.white70, fontSize: 12),
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-                  LinearProgressIndicator(
-                    value: progress,
-                    backgroundColor: Colors.white24,
-                    color: Colors.white,
-                    minHeight: 4,
-                  ),
-                  const SizedBox(height: 8),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: const [
-                          Icon(Icons.speed, color: Colors.white70, size: 16),
-                          SizedBox(width: 4),
-                          Text(
-                            "Mileage",
-                            style: TextStyle(color: Colors.white70),
-                          ),
-                        ],
-                      ),
-                      Text(
-                        "${mileage.toStringAsFixed(0)}/${maxMileage.toStringAsFixed(0)} km",
-                        style: const TextStyle(color: Colors.white),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 24),
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF38B000),
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color.fromRGBO(35, 35, 35, 0.5), // #232323 @ 50%
+              Color(0xFF000000), // #000000
+            ],
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: SingleChildScrollView(
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 600),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const SizedBox(height: 10),
+                    Stack(
                       children: [
-                        const Icon(
-                          Icons.check_circle,
-                          color: Colors.white,
-                          size: 60,
-                        ),
-                        const SizedBox(width: 16),
-                        Expanded(
+                        Positioned(
+                          left: 40,
+                          top: 0,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: const [
-                                  Icon(
-                                    Icons.thumb_up,
-                                    color: Colors.white,
-                                    size: 20,
-                                  ),
-                                  SizedBox(width: 6),
-                                  Text(
-                                    "No service required.",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 4),
-                              const Text(
-                                "Everything's is running perfectly.\nNext Service 10 August 2025",
+                            children: const [
+                              Text(
+                                "ALL",
                                 style: TextStyle(
-                                  color: Colors.white70,
-                                  fontSize: 12,
-                                  height: 1.3,
+                                  fontSize: 72,
+                                  fontFamily: 'Lato',
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                            
+                                ),
+                              ),
+                              Text(
+                                "GOOD",
+                                style: TextStyle(
+                                  fontSize: 72,
+                                   fontFamily: 'Lato',
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                          
                                 ),
                               ),
                             ],
                           ),
                         ),
+                        Align(
+                          alignment: Alignment.center,
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 130),
+                            child: Image.asset(
+                              'assets/images/car.png',
+                              height: screenWidth < 600 ? 200 : 250,
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                        ),
                       ],
                     ),
-                  ),
-
-                  // ===================== CAR INFORMATION ======================
-                  const SizedBox(height: 24),
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF1C1C1C),
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Header
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: const [
-                            Text(
-                              "CAR INFORMATION",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
-                              ),
+                    const SizedBox(height: 24),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const DetailPage(),
+                          ),
+                        );
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          Icon(Icons.lock_open, color: Colors.white, size: 18),
+                          SizedBox(width: 8),
+                          Text(
+                            "CHECK STATUS",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              decoration: TextDecoration.underline,
                             ),
-                            Text(
-                              "Edit",
-                              style: TextStyle(
-                                color: Colors.blue,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 14,
-                              ),
+                          ),
+                          SizedBox(width: 4),
+                          Icon(
+                            Icons.arrow_forward_ios,
+                            color: Colors.white,
+                            size: 14,
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    const Center(
+                      child: Text(
+                        "Updated vehicle status 20/07/2025 2:30 pm",
+                        style: TextStyle(color: Colors.white70, fontSize: 12),
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    LinearProgressIndicator(
+                      value: progress,
+                      backgroundColor: Colors.white24,
+                      color: Colors.white,
+                      minHeight: 4,
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Image.asset(
+                              'assets/images/km.png',
+                              height: 20,
+                              width: 20,
+                            ),
+                            const SizedBox(width: 4),
+                            const Text(
+                              "Mileage",
+                              style: TextStyle(color: Colors.white70),
                             ),
                           ],
                         ),
-                        const SizedBox(height: 16),
-
-                        // List Items
-                        infoItem(Icons.directions_car, "Name", "Apri's Car"),
-                        divider(),
-                        infoItem(Icons.directions_car_filled, "Brand", "Bugatti"),
-                        divider(),
-                        infoItem(Icons.calendar_today, "Year of Manufacture", "2024"),
-                        divider(),
-                        infoItem(Icons.sports_motorsports, "Car Type", "Sport Car"),
-                        divider(),
-                        infoItem(Icons.settings, "Transmission", "Manual"),
-                        divider(),
-                        infoItem(Icons.local_gas_station, "Fuel Type", "Petrol"),
+                        Text(
+                          "${mileage.toStringAsFixed(0)}/${maxMileage.toStringAsFixed(0)} km",
+                          style: const TextStyle(color: Colors.white),
+                        ),
                       ],
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 24),
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF38B000),
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Icon(
+                            Icons.check_circle,
+                            color: Colors.white,
+                            size: 60,
+                          ),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: const [
+                                    Icon(
+                                      Icons.thumb_up,
+                                      color: Colors.white,
+                                      size: 20,
+                                    ),
+                                    SizedBox(width: 6),
+                                    Text(
+                                      "No service required.",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 4),
+                                const Text(
+                                  "Everything's is running perfectly.\nNext Service 10 August 2025",
+                                  style: TextStyle(
+                                    color: Colors.white70,
+                                    fontSize: 12,
+                                    height: 1.3,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    // ===================== CAR INFORMATION ======================
+                    const SizedBox(height: 50),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 0,
+                      ), // opsional, sesuaikan
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Header
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: const [
+                              Text(
+                                "CAR INFORMATION",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                ),
+                              ),
+                              Text(
+                                "Edit",
+                                style: TextStyle(
+                                  color: Colors.blue,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 16),
+
+                          // List Items
+                          infoItem(Icons.directions_car, "Name", "Apri's Car"),
+                          divider(),
+                          infoItem(
+                            Icons.directions_car_filled,
+                            "Brand",
+                            "Bugatti",
+                          ),
+                          divider(),
+                          infoItem(
+                            Icons.calendar_today,
+                            "Year of Manufacture",
+                            "2024",
+                          ),
+                          divider(),
+                          infoItem(
+                            Icons.sports_motorsports,
+                            "Car Type",
+                            "Sport Car",
+                          ),
+                          divider(),
+                          infoItem(Icons.settings, "Transmission", "Manual"),
+                          divider(),
+                          infoItem(
+                            Icons.local_gas_station,
+                            "Fuel Type",
+                            "Petrol",
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -294,11 +335,7 @@ class _HomePageState extends State<HomePage> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(
-            icon,
-            color: Colors.white,
-            size: 20,
-          ),
+          Icon(icon, color: Colors.white, size: 20),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -315,14 +352,11 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(height: 2),
                 Text(
                   subtitle,
-                  style: const TextStyle(
-                    color: Colors.white70,
-                    fontSize: 13,
-                  ),
+                  style: const TextStyle(color: Colors.white70, fontSize: 13),
                 ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );

@@ -11,7 +11,7 @@ import 'snackbar/main_wrapper.dart';
 import 'pages/faq_page.dart';
 import 'pages/bengkel_page.dart';
 import 'pages/profile_page.dart';
-import 'pages/resetpassword_page.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -240,7 +240,7 @@ class _MyAppState extends State<MyApp> {
         '/faq': (context) => const FaqPage(),
         '/bengkel': (context) => const BengkelPage(),
         '/profile': (context) => const ProfilePage(),
-        '/resetpassword': (context) => const ResetPasswordPage(),
+        
       },
     );
   }
