@@ -10,7 +10,7 @@ class FaqPage extends StatefulWidget {
 class _FaqPageState extends State<FaqPage> {
   final List<Map<String, String>> faqList = [
     {
-      "question": "Apa itu aplikasi AutoNet dan apa fungsinya?",
+      "question": "Apa itu aplikasi AutoNest dan apa fungsinya?",
       "answer":
           "Aplikasi ini adalah platform pintar yang dirancang untuk membantu pemilik kendaraan memantau kondisi mobil mereka secara real-time. Dengan aplikasi ini, Anda dapat melihat status kendaraan, jadwal servis, lokasi bengkel rekomendasi, serta notifikasi peringatan servis secara otomatis.",
     },
@@ -58,18 +58,7 @@ class _FaqPageState extends State<FaqPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            AppBar(
-              backgroundColor: Colors.transparent,
-              elevation: 0,
-              leading: IconButton(
-                icon: Image.asset(
-                  'assets/images/hamburg.png',
-                  height: 24,
-                  width: 24,
-                ),
-                onPressed: () {},
-              ),
-            ),
+            AppBar(backgroundColor: Colors.transparent, elevation: 0),
 
             const SizedBox(height: 80),
             const Padding(
