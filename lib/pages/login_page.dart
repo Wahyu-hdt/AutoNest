@@ -1,5 +1,8 @@
 import 'package:autonest/service/auth.dart';
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:autonest/snackbar/main_wrapper.dart';
+import 'package:autonest/pages/add_car_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -9,21 +12,15 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  // TextEditingController untuk setiap input
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-
-  // Controller untuk Forgot Password
   final TextEditingController _forgotPasswordEmailController =
       TextEditingController();
 
-  // Memanggil fungsi auth supabase
   final AuthService _authService = AuthService();
+  final SupabaseClient _supabase = Supabase.instance.client;
 
-  // State untuk mengelola visibilitas password
   bool _isPasswordVisible = false;
-
-  // State untuk indikator loading saat proses Login
   bool _isLoading = false;
 
   @override
@@ -33,19 +30,16 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void dispose() {
-    // Pastikan untuk membuang controller saat widget
     _emailController.dispose();
     _passwordController.dispose();
     _forgotPasswordEmailController.dispose();
     super.dispose();
   }
 
-  // Fungsi untuk Login
   Future<void> _signIn() async {
     final String email = _emailController.text.trim();
     final String password = _passwordController.text.trim();
 
-    // Validasi Email
     if (!email.contains('@') || !email.contains('.')) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -64,7 +58,6 @@ class _LoginPageState extends State<LoginPage> {
       return;
     }
 
-    // Validasi Password
     if (password.isEmpty) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -84,20 +77,18 @@ class _LoginPageState extends State<LoginPage> {
     }
 
     setState(() {
-      _isLoading = true; // Tampilkan indikator loading
+      _isLoading = true;
     });
 
-    // Panggil fungsi Login dari AuthService
     final String? errorMessage = await _authService.login(email, password);
 
     if (!mounted) return;
 
     setState(() {
-      _isLoading = false; // Sembunyikan indikator loading
+      _isLoading = false;
     });
 
     if (errorMessage == null) {
-      // Login berhasil
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Login Successful!'),
@@ -110,21 +101,84 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
       );
-      Navigator.pushReplacementNamed(
-        context,
-        '/mainwrapper',
-      ); // Routing ke halaman utama
+
+      final String? userId = _supabase.auth.currentUser?.id;
+      if (userId != null) {
+        try {
+          final List<Map<String, dynamic>> cars = await _supabase
+              .from('Mobil')
+              .select('id')
+              .eq('user_profil_id', userId)
+              .limit(1);
+
+          if (mounted) {
+            if (cars.isEmpty) {
+              // Jika tidak ada data mobil, arahkan ke AddCarPage
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const AddCarPage()),
+              );
+            } else {
+              // Jika ada data mobil, arahkan ke MainWrapper
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder:
+                      (context) =>
+                          const MainWrapper(), // Langsung ke MainWrapper
+                ),
+              );
+            }
+          }
+        } on PostgrestException catch (e) {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Error checking car data: ${e.message}')),
+            );
+            // Fallback: Arahkan ke MainWrapper jika ada error saat cek mobil
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder:
+                    (context) => const MainWrapper(), // Fallback ke MainWrapper
+              ),
+            );
+          }
+        } catch (e) {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('An unexpected error occurred: $e')),
+            );
+            // Fallback: Arahkan ke MainWrapper jika ada error tak terduga
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder:
+                    (context) => const MainWrapper(), // Fallback ke MainWrapper
+              ),
+            );
+          }
+        }
+      } else {
+        // Jika userId null (seharusnya tidak terjadi setelah login berhasil),
+        if (mounted) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder:
+                  (context) => const MainWrapper(), // Fallback ke MainWrapper
+            ),
+          );
+        }
+      }
     } else {
-      // Login gagal, tampilkan pesan error
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(
-            errorMessage,
-          ), // Pesan error dari AuthService (Invalid email or password, dll.)
+          content: Text(errorMessage),
           behavior: SnackBarBehavior.floating,
           margin: const EdgeInsets.only(top: 60.0, left: 20.0, right: 20.0),
           duration: const Duration(seconds: 4),
-          backgroundColor: Colors.red, // Warna untuk error
+          backgroundColor: Colors.red,
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(10)),
           ),
@@ -133,7 +187,7 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  // Fungsi  Forgot Password
+  // Overlay forgot password
   Future<void> _showForgotPasswordDialog() async {
     _forgotPasswordEmailController.clear();
     return showDialog<void>(
@@ -185,7 +239,6 @@ class _LoginPageState extends State<LoginPage> {
               onPressed: () async {
                 final String email = _forgotPasswordEmailController.text.trim();
                 if (email.isEmpty) {
-                  // Tampilkan snackbar di dalam dialog jika email kosong
                   ScaffoldMessenger.of(dialogContext).showSnackBar(
                     const SnackBar(content: Text('Please enter your email.')),
                   );
@@ -196,13 +249,13 @@ class _LoginPageState extends State<LoginPage> {
 
                 setState(() {
                   _isLoading = true;
-                }); // Tampilkan loading di halaman utama
+                });
                 final String? errorMessage = await _authService
                     .sendPasswordResetEmail(email);
                 setState(() {
                   _isLoading = false;
-                }); // Sembunyikan loading
-
+                });
+                // message snackbar
                 if (mounted) {
                   if (errorMessage == null) {
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -232,6 +285,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  // konten utama
   @override
   Widget build(BuildContext context) {
     const Color topColor = Color(0xFF232323);
@@ -243,7 +297,6 @@ class _LoginPageState extends State<LoginPage> {
         builder: (context, constraints) {
           return Column(
             children: [
-              // Bagian Atas: Logo dan Welcome
               Padding(
                 padding: const EdgeInsets.fromLTRB(24, 32, 24, 0),
                 child: Column(
@@ -252,7 +305,7 @@ class _LoginPageState extends State<LoginPage> {
                     IconButton(
                       icon: const Icon(Icons.arrow_back, color: Colors.white),
                       onPressed: () {
-                        Navigator.pop(context); // Kembali ke halaman sebelumnya
+                        Navigator.pop(context);
                       },
                     ),
                     const SizedBox(height: 24),
@@ -282,10 +335,7 @@ class _LoginPageState extends State<LoginPage> {
                   ],
                 ),
               ),
-
               const SizedBox(height: 24),
-
-              // Bagian bawah
               Expanded(
                 child: Container(
                   width: double.infinity,
@@ -313,31 +363,24 @@ class _LoginPageState extends State<LoginPage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            //Kolom email
                             _buildTextField(
                               icon: Icons.email,
                               hint: 'Email',
-                              controller:
-                                  _emailController, // Hubungkan controller
+                              controller: _emailController,
                             ),
                             const SizedBox(height: 20),
-
-                            //Kolom password
                             _buildTextField(
                               icon: Icons.lock,
                               hint: 'Password',
-                              controller:
-                                  _passwordController, // Hubungkan controller
-                              obscureText:
-                                  !_isPasswordVisible, // Gunakan state password
+                              controller: _passwordController,
+                              obscureText: !_isPasswordVisible,
                               suffixIcon:
                                   _isPasswordVisible
                                       ? Icons.visibility
                                       : Icons.visibility_off,
                               onSuffixIconTap: () {
                                 setState(() {
-                                  _isPasswordVisible =
-                                      !_isPasswordVisible; // Ubah state password
+                                  _isPasswordVisible = !_isPasswordVisible;
                                 });
                               },
                             ),
@@ -345,8 +388,7 @@ class _LoginPageState extends State<LoginPage> {
                             Align(
                               alignment: Alignment.centerRight,
                               child: TextButton(
-                                onPressed:
-                                    _showForgotPasswordDialog, // Panggil dialog
+                                onPressed: _showForgotPasswordDialog,
                                 child: const Text(
                                   'Forgot Password?',
                                   style: TextStyle(color: Colors.white70),
@@ -357,11 +399,7 @@ class _LoginPageState extends State<LoginPage> {
                             SizedBox(
                               width: double.infinity,
                               child: ElevatedButton(
-                                // Panggil fungsi Login saat tombol ditekan
-                                onPressed:
-                                    _isLoading
-                                        ? null
-                                        : _signIn, // Nonaktifkan tombol saat loading
+                                onPressed: _isLoading ? null : _signIn,
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.transparent,
                                   elevation: 0,
@@ -377,7 +415,7 @@ class _LoginPageState extends State<LoginPage> {
                                     _isLoading
                                         ? const CircularProgressIndicator(
                                           color: Colors.white,
-                                        ) // Tampilkan loading
+                                        )
                                         : const Text(
                                           'Login',
                                           style: TextStyle(

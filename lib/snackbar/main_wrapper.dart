@@ -14,10 +14,8 @@ class MainWrapper extends StatefulWidget {
 class _MainWrapperState extends State<MainWrapper> {
   int _selectedIndex = 0;
 
-  // Penting: Berikan Key unik untuk setiap halaman
-  // Ini membantu AnimatedSwitcher melacak widget yang mana yang sedang tampil
   final List<Widget> _pages = [
-    const HomePage(key: ValueKey('HomePage')), // Contoh dengan ValueKey
+    const HomePage(key: ValueKey('HomePage')),
     const FaqPage(key: ValueKey('FaqPage')),
     const BengkelPage(key: ValueKey('BengkelPage')),
     const ProfilePage(key: ValueKey('ProfilePage')),
@@ -41,7 +39,7 @@ class _MainWrapperState extends State<MainWrapper> {
     return Scaffold(
       backgroundColor: const Color(0xFF0F0F0F),
       body: AnimatedSwitcher(
-        duration: const Duration(milliseconds: 300), // Durasi transisi
+        duration: const Duration(milliseconds: 300),
         switchInCurve: Curves.easeOut,
         switchOutCurve: Curves.easeIn,
         transitionBuilder: (Widget child, Animation<double> animation) {
