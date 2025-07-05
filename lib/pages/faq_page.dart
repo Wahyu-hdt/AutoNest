@@ -10,17 +10,27 @@ class FaqPage extends StatefulWidget {
 class _FaqPageState extends State<FaqPage> {
   final List<Map<String, String>> faqList = [
     {
-      "question": "Question 1",
+      "question": "Apa itu aplikasi AutoNet dan apa fungsinya?",
       "answer":
           "Aplikasi ini adalah platform pintar yang dirancang untuk membantu pemilik kendaraan memantau kondisi mobil mereka secara real-time. Dengan aplikasi ini, Anda dapat melihat status kendaraan, jadwal servis, lokasi bengkel rekomendasi, serta notifikasi peringatan servis secara otomatis.",
     },
     {
-      "question": "Question 2",
+      "question":
+          "Bagaimana cara menggunakan fitur pengecekan status kendaraan?",
       "answer":
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec malesuada ex non lorem gravida molestie. Etiam vitae tortor eget sem tincidunt condimentum. Vivamus dapibus quis sapien scelerisque hendrerit.",
+          "Anda hanya perlu masuk ke halaman utama aplikasi. Di sana, Anda akan langsung melihat status kendaraan seperti jarak tempuh, informasi servis terakhir, dan apakah ada peringatan atau tidak. Untuk informasi lebih detail, cukup tekan tombol Check Status",
     },
-    {"question": "Question 3", "answer": "Answer for question 3."},
-    {"question": "Question 4", "answer": "Answer for question 4."},
+    {
+      "question":
+          "Apakah saya bisa menemukan bengkel terdekat melalui aplikasi ini?",
+      "answer":
+          "Tentu! Aplikasi ini menyediakan fitur pencarian bengkel berdasarkan lokasi. Anda bisa memfilter berdasarkan daerah (seperti Jakarta, Surabaya, dll.) dan juga berdasarkan jenis layanan yang Anda butuhkan (seperti aki, oli, atau ban).",
+    },
+    {
+      "question": "Apakah data saya aman di dalam aplikasi ini?",
+      "answer":
+          "Keamanan data Anda adalah prioritas kami. Kami menggunakan enkripsi dan autentikasi yang kuat untuk memastikan informasi pribadi dan data kendaraan Anda tetap aman dan tidak disalahgunakan oleh pihak ketiga.",
+    },
   ];
 
   List<bool> expanded = [];

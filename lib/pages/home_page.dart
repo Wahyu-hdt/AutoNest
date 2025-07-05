@@ -1,8 +1,8 @@
-// lib/home_page.dart
 import 'package:autonest/pages/add_car_page.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:autonest/pages/status_detail_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -823,15 +823,25 @@ class _HomePageState extends State<HomePage> {
                     ),
 
                     const SizedBox(height: 24),
+                    // GestureDetector(
+                    //   onTap: () {
+                    //     ScaffoldMessenger.of(context).showSnackBar(
+                    //       const SnackBar(
+                    //         content: Text('Navigasi ke Detail Status Mobil'),
+                    //       ),
+                    //     );
+                    //     // TODO: Implement navigation to actual detail page if needed
+                    //   },
                     GestureDetector(
-                      onTap: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Navigasi ke Detail Status Mobil'),
-                          ),
-                        );
-                        // TODO: Implement navigation to actual detail page if needed
-                      },
+  onTap: () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const StatusDetailPage(),
+      ),
+    );
+  },
+
                       child: Container(
                         padding: const EdgeInsets.symmetric(
                           vertical: 10,
