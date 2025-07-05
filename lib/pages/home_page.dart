@@ -420,13 +420,13 @@ class _HomePageState extends State<HomePage> {
         cardColor = const Color(0xFFE53935);
         cardIcon = Icons.warning_amber;
         titleText = 'Service overdue !';
-        descriptionText = 'Your vehicle needs maintenance now.';
+        descriptionText = 'You Need To Bring Your Car To Service As Soon As Possible';
         break;
       case "SERVICE_SOON":
         cardColor = const Color(0xFFCDDC39);
         cardIcon = Icons.hourglass_empty;
         titleText = 'Service due soon !';
-        descriptionText = 'Your vehicle needs maintenance now.';
+        descriptionText = 'Your Next Service Is Due Shortly';
         break;
       case "ALL_GOOD":
         cardColor = const Color(0xFF38B000);
