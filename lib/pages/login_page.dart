@@ -2,7 +2,7 @@ import 'package:autonest/service/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:autonest/snackbar/main_wrapper.dart';
-import 'package:autonest/pages/add_car_page.dart';
+import 'package:autonest/pages/empty_home.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -116,7 +116,7 @@ class _LoginPageState extends State<LoginPage> {
               // Jika tidak ada data mobil, arahkan ke AddCarPage
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => const AddCarPage()),
+                MaterialPageRoute(builder: (context) => const EmptyHomePage()),
               );
             } else {
               // Jika ada data mobil, arahkan ke MainWrapper

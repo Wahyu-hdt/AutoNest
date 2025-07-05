@@ -1,5 +1,3 @@
-// lib/pages/add_car_page.dart
-
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -57,8 +55,6 @@ class _AddCarPageState extends State<AddCarPage> {
       _isEditing = true;
       _nameController.text = widget.carData!['nama_mobil'] ?? '';
       _brandController.text = widget.carData!['brand'] ?? '';
-      // Perhatikan penggunaan 'year_of_manufacturer' sesuai pembahasan sebelumnya
-      // PASTIKAN NAMA KOLOM DI SUPABASE ADALAH 'year_of_manufacturer'
       _yearOfManufactureController.text =
           (widget.carData!['year_of_manufacturer'] ?? '').toString();
       _lastServiceMileageController.text =
@@ -153,10 +149,10 @@ class _AddCarPageState extends State<AddCarPage> {
       };
 
       if (!_isEditing) {
-        // When adding a new car, initialize current_mileage and next_service_interval
-        // current_mileage is initially the same as last_service_mileage
+        // jika menambahkan mobil baru. inisiasi current_mileage and next_service_interval
+        // current_mileage mula mula akan sama dengan last_service_mileage
         carDataToSave['current_mileage'] = lastServiceMileage;
-        // next_service_interval is 10000km from initial last_service_mileage
+        // next_service_interval adalah 10000km dari awal last_service_mileage
         carDataToSave['next_service_interval'] = lastServiceMileage + 10000.0;
       }
 
@@ -185,6 +181,9 @@ class _AddCarPageState extends State<AddCarPage> {
             true,
           ); // Kembali dan beritahu HomePage untuk refresh
         }
+      }
+      if (mounted) {
+        Navigator.pop(context, true);
       }
     } on PostgrestException catch (error) {
       if (mounted) {

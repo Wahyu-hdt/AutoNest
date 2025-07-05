@@ -14,15 +14,13 @@ class _FaqPageState extends State<FaqPage> {
       "answer":
           "Aplikasi ini adalah platform pintar yang dirancang untuk membantu pemilik kendaraan memantau kondisi mobil mereka secara real-time. Dengan aplikasi ini, Anda dapat melihat status kendaraan, jadwal servis, lokasi bengkel rekomendasi, serta notifikasi peringatan servis secara otomatis.",
     },
-    {"question": "Question 2", 
-    "answer": 
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec malesuada ex non lorem gravida molestie. Etiam vitae tortor eget sem tincidunt condimentum. Vivamus dapibus quis sapien scelerisque hendrerit."},
-    {"question": "Question 3", 
-    "answer": 
-          "Answer for question 3."},
-    {"question": "Question 4", 
-    "answer": 
-          "Answer for question 4."},
+    {
+      "question": "Question 2",
+      "answer":
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec malesuada ex non lorem gravida molestie. Etiam vitae tortor eget sem tincidunt condimentum. Vivamus dapibus quis sapien scelerisque hendrerit.",
+    },
+    {"question": "Question 3", "answer": "Answer for question 3."},
+    {"question": "Question 4", "answer": "Answer for question 4."},
   ];
 
   List<bool> expanded = [];
@@ -61,16 +59,6 @@ class _FaqPageState extends State<FaqPage> {
                 ),
                 onPressed: () {},
               ),
-              actions: [
-                IconButton(
-                  icon: Image.asset(
-                    'assets/images/profil.png',
-                    height: 24,
-                    width: 24,
-                  ),
-                  onPressed: () {},
-                ),
-              ],
             ),
 
             const SizedBox(height: 80),
