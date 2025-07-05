@@ -24,10 +24,10 @@ class _HomePageState extends State<HomePage> {
 
   final Map<String, String> _carImagePaths = {
     'Sport': 'assets/images/car.png',
-    'Sedan': 'assets/images/sedan.png',
-    'Hatchback': 'assets/images/hatchback66.png',
-    'SUV': 'assets/images/suv.png',
-    'Truck': 'assets/images/truck.png',
+    'Sedan': 'assets/images/sedan1.png',
+    'Hatchback': 'assets/images/hatchback1.png',
+    'SUV': 'assets/images/suv1.png',
+    'Truck': 'assets/images/truck1.png',
   };
 
   @override
@@ -730,27 +730,6 @@ class _HomePageState extends State<HomePage> {
     mileageProgressText =
         '${NumberFormat('#,##0').format(currentMileage)} km / ${NumberFormat('#,##0').format(nextServiceInterval)} ';
 
-    // Mendapatkan lebar layar untuk perhitungan persentase
-    double screenWidth = MediaQuery.of(context).size.width;
-
-    // Tentukan lebar gambar sebagai persentase dari lebar layar.
-    // Misalnya, 70% dari lebar layar.
-    // Sesuaikan nilai multiplier ini (0.7) sesuai kebutuhan desain Anda.
-    // --- PERUBAHAN DI SINI: MENINGKATKAN PERSENTASE LEBAR KE 80% ---
-    final double imageCalculatedWidth =
-        screenWidth * 0.8; // 80% dari lebar layar
-    // --- AKHIR PERUBAHAN ---
-
-    // Tentukan tinggi gambar secara proporsional atau tetap.
-    // Untuk menjaga rasio aspek dan konsistensi, lebih baik tentukan salah satu (misal lebar)
-    // dan biarkan 'fit: BoxFit.contain' yang mengatur tinggi.
-    // Jika Anda benar-benar ingin tinggi tetap, Anda bisa gunakan:
-    // final double imageCalculatedHeight = screenHeight * 0.3; // Misal 30% dari tinggi layar
-    // Namun, jika rasio aspek gambar berbeda, ini bisa membuat gambar terlihat berbeda.
-    // Untuk menjaga rasio aspek dan memastikan gambar tidak terpotong,
-    // yang terbaik adalah hanya menentukan satu dimensi (misal lebar) dan gunakan BoxFit.contain.
-    // Atau, jika Anda ingin ukuran tetap (misal 200x200), tentukan keduanya.
-
     return Scaffold(
       backgroundColor: const Color(0xFF0F0F0F), // Background utama
       appBar: AppBar(
@@ -806,6 +785,7 @@ class _HomePageState extends State<HomePage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     const SizedBox(height: 10),
+
                     Stack(
                       alignment: Alignment.topCenter,
                       children: [
@@ -827,18 +807,21 @@ class _HomePageState extends State<HomePage> {
                         // PERUBAHAN UTAMA DI SINI: Menggunakan ukuran persentase dari lebar layar
                         Padding(
                           padding: const EdgeInsets.only(top: 130),
-                          child: Image.asset(
-                            _getCarImagePath(carType),
-                            width:
-                                imageCalculatedWidth, // Lebar berdasarkan persentase
-                            // height: imageCalculatedHeight, // Opsional: jika ingin tinggi juga persentase
-                            fit:
-                                BoxFit
-                                    .contain, // Memastikan gambar tidak terpotong dan rasio aspek terjaga
+
+                          child: SizedBox(
+                            height: 220,
+                            width: double.infinity,
+                            child: Image.asset(
+                              _getCarImagePath(carType),
+                              fit:
+                                  BoxFit
+                                      .fitWidth, // ini akan buat mobil memenuhi lebar layar
+                            ),
                           ),
                         ),
                       ],
                     ),
+
                     const SizedBox(height: 24),
                     GestureDetector(
                       onTap: () {
