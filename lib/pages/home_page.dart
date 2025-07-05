@@ -24,10 +24,10 @@ class _HomePageState extends State<HomePage> {
 
   final Map<String, String> _carImagePaths = {
     'Sport': 'assets/images/car.png',
-    'Sedan': 'assets/images/car.png',
-    'Hatchback': 'assets/images/car.png',
-    'SUV': 'assets/images/car.png',
-    'Truck': 'assets/images/car.png',
+    'Sedan': 'assets/images/sedan1.png',
+    'Hatchback': 'assets/images/hatchback1.png',
+    'SUV': 'assets/images/suv1.png',
+    'Truck': 'assets/images/truck1.png',
   };
 
   @override
@@ -787,6 +787,7 @@ class _HomePageState extends State<HomePage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     const SizedBox(height: 10),
+
                     Stack(
                       alignment: Alignment.topCenter,
                       children: [
@@ -807,14 +808,20 @@ class _HomePageState extends State<HomePage> {
                         ),
                         Padding(
                           padding: const EdgeInsets.only(top: 130),
-                          child: Image.asset(
-                            _getCarImagePath(carType),
-                            height: screenWidth < 600 ? 200 : 250,
-                            fit: BoxFit.contain,
+                          child: SizedBox(
+                            height: 220,
+                            width: double.infinity,
+                            child: Image.asset(
+                              _getCarImagePath(carType),
+                              fit:
+                                  BoxFit
+                                      .fitWidth, // ini akan buat mobil memenuhi lebar layar
+                            ),
                           ),
                         ),
                       ],
                     ),
+
                     const SizedBox(height: 24),
                     GestureDetector(
                       onTap: () {
