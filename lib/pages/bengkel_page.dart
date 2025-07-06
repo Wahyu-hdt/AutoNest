@@ -65,10 +65,8 @@ class _BengkelPageState extends State<BengkelPage> {
   }
 
   Future<void> _launchMapsUrl(String location) async {
-    // Menggunakan format URL untuk mencari lokasi di Google Maps
-
     final Uri url = Uri.parse(
-      'http://googleusercontent.com/maps.google.com/4{Uri.encodeComponent(location)}',
+      'https://www.google.com/maps/search/?api=1&query=${Uri.encodeComponent(location)}',
     );
     if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
       if (mounted) {
@@ -156,9 +154,7 @@ class _BengkelPageState extends State<BengkelPage> {
                   ..._spesialisasiOptions
                       .map(
                         (spesialisasi) => Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 4.0,
-                          ), // Jarak antar tombol
+                          padding: const EdgeInsets.symmetric(horizontal: 4.0),
                           child: ChoiceChip(
                             label: Text(spesialisasi),
                             selected: _selectedSpesialisasi == spesialisasi,

@@ -21,8 +21,6 @@ class _AddCarPageState extends State<AddCarPage> {
       TextEditingController();
   final TextEditingController _lastServiceMileageController =
       TextEditingController();
-  // We don't need controllers for current_mileage or next_service_interval here,
-  // as they are either derived on add, or updated via HomePage's mechanism.
 
   String? _selectedCarType;
   String? _selectedTransmission;
@@ -60,7 +58,7 @@ class _AddCarPageState extends State<AddCarPage> {
       _lastServiceMileageController.text =
           (widget.carData!['last_service_mileage'] ?? '').toString();
 
-      // CAR TYPE
+      // CAR TYPE Error
       final String? carTypeFromDb = widget.carData!['jenis_mobil'];
       if (carTypeFromDb != null) {
         if (_carTypes.contains(carTypeFromDb)) {
@@ -77,7 +75,7 @@ class _AddCarPageState extends State<AddCarPage> {
         _selectedCarType = null;
       }
 
-      // FUEL TYPE
+      // FUEL TYPE Error
       final String? fuelTypeFromDb =
           widget.carData!['fuel_type']?.toString().trim();
       if (fuelTypeFromDb != null) {

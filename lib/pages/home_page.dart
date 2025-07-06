@@ -420,7 +420,8 @@ class _HomePageState extends State<HomePage> {
         cardColor = const Color(0xFFE53935);
         cardIcon = Icons.warning_amber;
         titleText = 'Service overdue !';
-        descriptionText = 'You Need To Bring Your Car To Service As Soon As Possible';
+        descriptionText =
+            'You Need To Bring Your Car To Service As Soon As Possible';
         break;
       case "SERVICE_SOON":
         cardColor = const Color(0xFFCDDC39);
@@ -823,24 +824,16 @@ class _HomePageState extends State<HomePage> {
                     ),
 
                     const SizedBox(height: 24),
-                    // GestureDetector(
-                    //   onTap: () {
-                    //     ScaffoldMessenger.of(context).showSnackBar(
-                    //       const SnackBar(
-                    //         content: Text('Navigasi ke Detail Status Mobil'),
-                    //       ),
-                    //     );
-                    //     // TODO: Implement navigation to actual detail page if needed
-                    //   },
+
                     GestureDetector(
-  onTap: () {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const StatusDetailPage(),
-      ),
-    );
-  },
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const StatusDetailPage(),
+                          ),
+                        );
+                      },
 
                       child: Container(
                         padding: const EdgeInsets.symmetric(
