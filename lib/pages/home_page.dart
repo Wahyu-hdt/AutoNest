@@ -1,3 +1,4 @@
+// home_page.dart
 import 'package:autonest/pages/add_car_page.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -436,6 +437,10 @@ class _HomePageState extends State<HomePage> {
         descriptionText = "Everything's is running perfectly.";
         break;
       default:
+        // This case handles "LOADING", "NO_CAR", "ERROR" and should return an empty widget
+        // or a specific message, rather than a full card with potentially uninitialized values.
+        // Given your _carData == null check at the start, this default implies an unexpected state.
+        // For simplicity and to avoid potential render errors, returning SizedBox.shrink() is safer here.
         return const SizedBox.shrink();
     }
 
@@ -686,6 +691,7 @@ class _HomePageState extends State<HomePage> {
               icon: const Icon(Icons.person, color: Colors.white),
               onPressed: () {
                 // TODO: Handle profile action
+                // You might want to navigate to a profile page here
               },
             ),
           ],
@@ -730,6 +736,41 @@ class _HomePageState extends State<HomePage> {
 
     mileageProgressText =
         '${NumberFormat('#,##0').format(currentMileage)} km / ${NumberFormat('#,##0').format(nextServiceInterval)} ';
+
+    // Calculate next service date based on mileage difference (estimated 100km/day)
+    int daysRemainingForNextService =
+        ((nextServiceInterval - currentMileage) / 100).ceil();
+    if (daysRemainingForNextService < 0) {
+      daysRemainingForNextService = 0; // Ensure non-negative days
+    }
+    DateTime nextServiceDateTime = DateTime.now().add(
+      Duration(days: daysRemainingForNextService),
+    );
+    String formattedNextServiceDate = DateFormat(
+      'dd MMMM yyyy', // Corrected: Removed extra character 'ð'
+    ).format(nextServiceDateTime);
+
+    // For last service date, assuming it's related to last_service_mileage update.
+    // If you have a 'last_service_date' column in your 'Mobil' table, use that.
+    // Otherwise, we can use a placeholder or derive from current date if no specific date is available.
+    // It's better to fetch this from _carData if available, otherwise it's a static placeholder.
+    // Example of fetching if 'last_service_date' exists in _carData:
+    String formattedLastServiceDate;
+    if (_carData!['last_service_date'] != null) {
+      // Assuming 'last_service_date' is stored as a valid date string or timestamp
+      try {
+        final DateTime lastServiceDbDate = DateTime.parse(
+          _carData!['last_service_date'],
+        );
+        formattedLastServiceDate = DateFormat(
+          'dd MMMM yyyy',
+        ).format(lastServiceDbDate);
+      } catch (e) {
+        formattedLastServiceDate = 'N/A'; // Handle parsing error
+      }
+    } else {
+      formattedLastServiceDate = '21 June 2025'; // Placeholder if not in DB
+    }
 
     return Scaffold(
       backgroundColor: const Color(0xFF0F0F0F), // Background utama
@@ -808,7 +849,6 @@ class _HomePageState extends State<HomePage> {
                         // PERUBAHAN UTAMA DI SINI: Menggunakan ukuran persentase dari lebar layar
                         Padding(
                           padding: const EdgeInsets.only(top: 130),
-
                           child: SizedBox(
                             height: 220,
                             width: double.infinity,
@@ -827,14 +867,55 @@ class _HomePageState extends State<HomePage> {
 
                     GestureDetector(
                       onTap: () {
+                        // Pass the required data to StatusDetailPage
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
-                            builder: (context) => const StatusDetailPage(),
+                          PageRouteBuilder(
+                            pageBuilder:
+                                (
+                                  context,
+                                  animation,
+                                  secondaryAnimation,
+                                ) => StatusDetailPage(
+                                  carId:
+                                      _carData!['id']
+                                          as String, // FIX: Pass the required carId
+                                  lastServiceDate: formattedLastServiceDate,
+                                  nextServiceDate: formattedNextServiceDate,
+                                  overallCondition:
+                                      _getStatusMainText()
+                                          .replaceAll('\n', ' ')
+                                          .trim(),
+                                ),
+                            transitionsBuilder: (
+                              context,
+                              animation,
+                              secondaryAnimation,
+                              child,
+                            ) {
+                              const begin = Offset(
+                                0.0,
+                                1.0,
+                              ); // Start from bottom
+                              const end = Offset.zero; // End at normal position
+                              const curve = Curves.ease; // Animation curve
+
+                              var tween = Tween(
+                                begin: begin,
+                                end: end,
+                              ).chain(CurveTween(curve: curve));
+
+                              return SlideTransition(
+                                position: animation.drive(tween),
+                                child: child,
+                              );
+                            },
+                            transitionDuration: const Duration(
+                              milliseconds: 500,
+                            ), // Adjust duration as needed
                           ),
                         );
                       },
-
                       child: Container(
                         padding: const EdgeInsets.symmetric(
                           vertical: 10,
@@ -870,6 +951,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                     ),
+
                     const SizedBox(height: 8),
                     Center(
                       child: Text(

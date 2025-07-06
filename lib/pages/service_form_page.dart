@@ -1,13 +1,26 @@
+// service_form_page.dart
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:intl/intl.dart';
 
 class ServiceFormPage extends StatefulWidget {
-  const ServiceFormPage({super.key});
+  final String carId; // Menerima carId
+  const ServiceFormPage({
+    super.key,
+    required this.carId,
+  }); // Perbarui constructor
 
   @override
   State<ServiceFormPage> createState() => _ServiceFormPageState();
 }
 
 class _ServiceFormPageState extends State<ServiceFormPage> {
+  final _supabase = Supabase.instance.client; // Inisialisasi Supabase client
+  final TextEditingController _mileageController = TextEditingController();
+  final TextEditingController _dateController = TextEditingController();
+  List<String> selectedServices = [];
+  bool _isLoading = false; // Untuk indikator loading
+
   final List<String> serviceOptions = [
     'Oil',
     'Brake',
@@ -15,7 +28,20 @@ class _ServiceFormPageState extends State<ServiceFormPage> {
     'Spark Plugs',
   ];
 
-  List<String> selectedServices = [];
+  @override
+  void initState() {
+    super.initState();
+    _dateController.text = DateFormat(
+      'yyyy-MM-dd',
+    ).format(DateTime.now()); // Set tanggal default hari ini
+  }
+
+  @override
+  void dispose() {
+    _mileageController.dispose();
+    _dateController.dispose();
+    super.dispose();
+  }
 
   void _showMultiSelectDialog() async {
     final List<String> tempSelected = List.from(selectedServices);
@@ -73,6 +99,98 @@ class _ServiceFormPageState extends State<ServiceFormPage> {
     );
   }
 
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData.dark().copyWith(
+            colorScheme: const ColorScheme.dark(
+              primary: Colors.blueAccent,
+              onPrimary: Colors.white,
+              surface: Color(0xFF222222),
+              onSurface: Colors.white,
+            ),
+            dialogBackgroundColor: const Color(0xFF1C1C1E),
+          ),
+          child: child!,
+        );
+      },
+    );
+    if (picked != null) {
+      setState(() {
+        _dateController.text = DateFormat('yyyy-MM-dd').format(picked);
+      });
+    }
+  }
+
+  // Fungsi untuk menambahkan riwayat servis ke Supabase
+  Future<void> _addServiceEntry() async {
+    if (_mileageController.text.isEmpty ||
+        _dateController.text.isEmpty ||
+        selectedServices.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Please fill all fields and select at least one service.',
+          ),
+        ),
+      );
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      final double mileage = double.parse(_mileageController.text);
+      final String date = _dateController.text;
+      final String serviceTypes = selectedServices.join(
+        ', ',
+      ); // Gabungkan layanan yang dipilih menjadi satu string
+
+      await _supabase.from('Gantipart').insert({
+        // Gunakan nama tabel 'Gantipart'
+        'mobil_id': widget.carId, // Menggunakan carId dari widget
+        'tanggal_service': date, // Nama kolom sesuai skema
+        'mileage_service': mileage, // Nama kolom sesuai skema
+        'tipe_service': serviceTypes, // Nama kolom sesuai skema
+      });
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Service history added successfully!')),
+        );
+        Navigator.pop(
+          context,
+          true,
+        ); // Kembali ke halaman sebelumnya dan beri sinyal sukses
+      }
+    } on PostgrestException catch (error) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error adding service history: ${error.message}'),
+          ),
+        );
+      }
+    } catch (error) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Terjadi kesalahan tak terduga: $error')),
+        );
+      }
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -110,6 +228,8 @@ class _ServiceFormPageState extends State<ServiceFormPage> {
                 const SizedBox(height: 10),
                 const Text("Mileage", style: TextStyle(color: Colors.white70)),
                 TextField(
+                  controller: _mileageController, // Tambahkan controller
+                  keyboardType: TextInputType.number,
                   style: const TextStyle(color: Colors.white),
                   decoration: InputDecoration(
                     filled: true,
@@ -154,6 +274,8 @@ class _ServiceFormPageState extends State<ServiceFormPage> {
                 const SizedBox(height: 20),
                 const Text("Date", style: TextStyle(color: Colors.white70)),
                 TextField(
+                  controller: _dateController, // Tambahkan controller
+                  readOnly: true,
                   style: const TextStyle(color: Colors.white),
                   decoration: InputDecoration(
                     filled: true,
@@ -163,7 +285,7 @@ class _ServiceFormPageState extends State<ServiceFormPage> {
                     ),
                   ),
                   onTap: () {
-                    // Date picker bisa ditambahkan di sini
+                    _selectDate(context); // Panggil date picker
                   },
                 ),
 
@@ -175,10 +297,18 @@ class _ServiceFormPageState extends State<ServiceFormPage> {
                       foregroundColor: Colors.white,
                       side: const BorderSide(color: Colors.white),
                     ),
-                    onPressed: () {
-                      debugPrint("Selected Services: $selectedServices");
-                    },
-                    child: const Text("+ Service"),
+                    onPressed: _isLoading ? null : _addServiceEntry,
+                    child:
+                        _isLoading
+                            ? const SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 2,
+                              ),
+                            )
+                            : const Text("+ Service"),
                   ),
                 ),
               ],
