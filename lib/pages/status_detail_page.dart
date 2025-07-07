@@ -27,6 +27,9 @@ class _StatusDetailPageState extends State<StatusDetailPage> {
   List<Map<String, dynamic>> _allServiceHistory = [];
   bool _isLoading = true;
 
+  String _displayedLastServiceDate = 'N/A';
+  String _displayedLastServiceMileage = 'N/A';
+
   @override
   void initState() {
     super.initState();
@@ -58,9 +61,29 @@ class _StatusDetailPageState extends State<StatusDetailPage> {
           .from('Gantipart')
           .select()
           .eq('mobil_id', widget.carId)
-          .order('tanggal_service', ascending: false);
+          .order(
+            'tanggal_service',
+            ascending: false,
+          ); // Urutkan berdasarkan tanggal terbaru
 
       _allServiceHistory = responseAll;
+
+      // --- LOGIKA BARU UNTUK MENDAPATKAN SERVIS TERAKHIR SECARA KESELURUHAN ---
+      if (_allServiceHistory.isNotEmpty) {
+        final latestServiceEntry =
+            _allServiceHistory.first; // Karena sudah diurutkan descending
+        final DateTime latestDate = DateTime.parse(
+          latestServiceEntry['tanggal_service'],
+        );
+        _displayedLastServiceDate = DateFormat('dd/MM/yyyy').format(latestDate);
+        _displayedLastServiceMileage =
+            latestServiceEntry['mileage_service']?.toStringAsFixed(0) ?? 'N/A';
+      } else {
+        _displayedLastServiceDate =
+            widget.lastServiceDate; // Fallback ke prop jika tidak ada riwayat
+        _displayedLastServiceMileage = 'N/A';
+      }
+      // --- AKHIR LOGIKA BARU ---
 
       final Map<String, Map<String, dynamic>> latestComponentServices = {};
       for (var service in responseAll) {
@@ -135,11 +158,9 @@ class _StatusDetailPageState extends State<StatusDetailPage> {
                             item['tanggal_service'] != null
                                 ? DateTime.parse(item['tanggal_service'])
                                 : DateTime.now();
-                        // --- PERUBAHAN DI SINI ---
                         final String formattedDate = DateFormat(
                           'dd/MM/yyyy', // Mengubah format tanggal
                         ).format(serviceDate);
-                        // --- AKHIR PERUBAHAN ---
                         return Padding(
                           padding: const EdgeInsets.symmetric(vertical: 8.0),
                           child: Column(
@@ -340,8 +361,9 @@ class _StatusDetailPageState extends State<StatusDetailPage> {
                                           ),
                                         ),
                                         const SizedBox(height: 4),
+
                                         Text(
-                                          "Last Service : ${widget.lastServiceDate}\nNext Service : ${widget.nextServiceDate}",
+                                          "Last Service : $_displayedLastServiceDate (${_displayedLastServiceMileage} KM)\nNext Service : ${DateFormat('dd/MM/yyyy').format(DateFormat('dd MMMM yyyy').parse(widget.nextServiceDate))}",
                                           style: const TextStyle(
                                             color: Colors.white70,
                                             fontSize: 13,
@@ -425,12 +447,10 @@ class _StatusDetailPageState extends State<StatusDetailPage> {
                                                       item['tanggal_service'],
                                                     )
                                                     : DateTime.now();
-                                            // --- PERUBAHAN DI SINI ---
                                             final String
                                             formattedDate = DateFormat(
                                               'dd/MM/yyyy', // Mengubah format tanggal
                                             ).format(serviceDate);
-                                            // --- AKHIR PERUBAHAN ---
                                             return Padding(
                                               padding: const EdgeInsets.only(
                                                 right: 8,
