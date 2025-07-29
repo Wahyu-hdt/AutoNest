@@ -18,7 +18,11 @@ class _BengkelPageState extends State<BengkelPage> {
   String? _selectedSpesialisasi;
 
   final List<String> _lokasiOptions = ['Jakarta', 'Yogyakarta', 'Surabaya'];
-  final List<String> _spesialisasiOptions = ['Mesin', 'Suspensi', 'Body'];
+  final List<String> _spesialisasiOptions = [
+    'Engine',
+    'Suspension',
+    'Body',
+  ]; // Translated to English
 
   @override
   void initState() {
@@ -81,7 +85,7 @@ class _BengkelPageState extends State<BengkelPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Daftar Bengkel'),
+        title: const Text('Workshop List'), // Translated to English
         backgroundColor: const Color(0xFF232323),
         foregroundColor: Colors.white,
         automaticallyImplyLeading: false,
@@ -97,7 +101,7 @@ class _BengkelPageState extends State<BengkelPage> {
               child: Row(
                 children: [
                   const Text(
-                    'Lokasi:',
+                    'Location:', // Translated to English
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 16,
@@ -143,7 +147,7 @@ class _BengkelPageState extends State<BengkelPage> {
               child: Row(
                 children: [
                   const Text(
-                    'Spesialisasi:',
+                    'Specialization:', // Translated to English
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 16,
@@ -192,7 +196,7 @@ class _BengkelPageState extends State<BengkelPage> {
                     : _bengkelList.isEmpty
                     ? const Center(
                       child: Text(
-                        'Tidak ada bengkel ditemukan.',
+                        'No workshops found.', // Translated to English
                         style: TextStyle(color: Colors.white),
                       ),
                     )
@@ -201,7 +205,8 @@ class _BengkelPageState extends State<BengkelPage> {
                       itemBuilder: (context, index) {
                         final bengkel = _bengkelList[index];
                         final String lokasiBengkel =
-                            bengkel['lokasi'] ?? 'Lokasi Tidak Diketahui';
+                            bengkel['lokasi'] ??
+                            'Unknown Location'; // Translated to English
                         return Card(
                           margin: const EdgeInsets.symmetric(
                             horizontal: 8.0,
@@ -215,7 +220,7 @@ class _BengkelPageState extends State<BengkelPage> {
                               children: [
                                 Text(
                                   bengkel['nama_bengkel'] ??
-                                      'Nama Tidak Diketahui',
+                                      'Unknown Name', // Translated to English
                                   style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 18,
@@ -224,12 +229,12 @@ class _BengkelPageState extends State<BengkelPage> {
                                 ),
                                 const SizedBox(height: 4),
                                 Text(
-                                  'Lokasi: $lokasiBengkel',
+                                  'Location: $lokasiBengkel', // Translated to English
                                   style: TextStyle(color: Colors.grey[400]),
                                 ),
                                 const SizedBox(height: 4),
                                 Text(
-                                  'Spesialisasi: ${bengkel['spesialisasi'] ?? 'Tidak Diketahui'}',
+                                  'Specialization: ${bengkel['spesialisasi'] ?? 'Unknown'}', // Translated to English
                                   style: TextStyle(color: Colors.grey[400]),
                                 ),
                                 const SizedBox(height: 8),
@@ -242,8 +247,8 @@ class _BengkelPageState extends State<BengkelPage> {
                                       size: 30,
                                     ),
                                     onPressed: () {
-                                      if (lokasiBengkel !=
-                                          'Lokasi Tidak Diketahui') {
+                                      if (lokasiBengkel != 'Unknown Location') {
+                                        // Translated to English
                                         _launchMapsUrl(lokasiBengkel);
                                       } else {
                                         ScaffoldMessenger.of(
@@ -251,13 +256,14 @@ class _BengkelPageState extends State<BengkelPage> {
                                         ).showSnackBar(
                                           const SnackBar(
                                             content: Text(
-                                              'Lokasi bengkel tidak tersedia.',
+                                              'Workshop location not available.', // Translated to English
                                             ),
                                           ),
                                         );
                                       }
                                     },
-                                    tooltip: 'Lihat di Google Maps',
+                                    tooltip:
+                                        'View on Google Maps', // Translated to English
                                   ),
                                 ),
                               ],

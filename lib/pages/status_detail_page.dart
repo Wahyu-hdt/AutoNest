@@ -83,7 +83,6 @@ class _StatusDetailPageState extends State<StatusDetailPage> {
             widget.lastServiceDate; // Fallback ke prop jika tidak ada riwayat
         _displayedLastServiceMileage = 'N/A';
       }
-      // --- AKHIR LOGIKA BARU ---
 
       final Map<String, Map<String, dynamic>> latestComponentServices = {};
       for (var service in responseAll) {

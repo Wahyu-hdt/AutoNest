@@ -750,11 +750,6 @@ class _HomePageState extends State<HomePage> {
       'dd MMMM yyyy', // Corrected: Removed extra character 'ð'
     ).format(nextServiceDateTime);
 
-    // For last service date, assuming it's related to last_service_mileage update.
-    // If you have a 'last_service_date' column in your 'Mobil' table, use that.
-    // Otherwise, we can use a placeholder or derive from current date if no specific date is available.
-    // It's better to fetch this from _carData if available, otherwise it's a static placeholder.
-    // Example of fetching if 'last_service_date' exists in _carData:
     String formattedLastServiceDate;
     if (_carData!['last_service_date'] != null) {
       // Assuming 'last_service_date' is stored as a valid date string or timestamp

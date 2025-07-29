@@ -10,26 +10,24 @@ class FaqPage extends StatefulWidget {
 class _FaqPageState extends State<FaqPage> {
   final List<Map<String, String>> faqList = [
     {
-      "question": "Apa itu aplikasi AutoNest dan apa fungsinya?",
+      "question": "What is the AutoNest app and what does it do?",
       "answer":
-          "Aplikasi ini adalah platform pintar yang dirancang untuk membantu pemilik kendaraan memantau kondisi mobil mereka secara real-time. Dengan aplikasi ini, Anda dapat melihat status kendaraan, jadwal servis, lokasi bengkel rekomendasi, serta notifikasi peringatan servis secara otomatis.",
+          "This application is a smart platform designed to help vehicle owners monitor their car's condition in real-time. With this app, you can view vehicle status, service schedules, recommended workshop locations, and automatic service reminder notifications.",
     },
     {
-      "question":
-          "Bagaimana cara menggunakan fitur pengecekan status kendaraan?",
+      "question": "How do I use the vehicle status check feature?",
       "answer":
-          "Anda hanya perlu masuk ke halaman utama aplikasi. Di sana, Anda akan langsung melihat status kendaraan seperti jarak tempuh, informasi servis terakhir, dan apakah ada peringatan atau tidak. Untuk informasi lebih detail, cukup tekan tombol Check Status",
+          "You just need to go to the main page of the application. There, you will immediately see the vehicle status such as mileage, last service information, and whether there are any warnings. For more detailed information, simply press the 'Check Status' button.",
     },
     {
-      "question":
-          "Apakah saya bisa menemukan bengkel terdekat melalui aplikasi ini?",
+      "question": "Can I find nearby workshops through this app?",
       "answer":
-          "Tentu! Aplikasi ini menyediakan fitur pencarian bengkel berdasarkan lokasi. Anda bisa memfilter berdasarkan daerah (seperti Jakarta, Surabaya, dll.) dan juga berdasarkan jenis layanan yang Anda butuhkan (seperti aki, oli, atau ban).",
+          "Certainly! This app provides a workshop search feature based on location. You can filter by area (such as Jakarta, Surabaya, etc.) and also by the type of service you need (such as battery, oil, or tires).",
     },
     {
-      "question": "Apakah data saya aman di dalam aplikasi ini?",
+      "question": "Is my data safe within this application?",
       "answer":
-          "Keamanan data Anda adalah prioritas kami. Kami menggunakan enkripsi dan autentikasi yang kuat untuk memastikan informasi pribadi dan data kendaraan Anda tetap aman dan tidak disalahgunakan oleh pihak ketiga.",
+          "Your data security is our priority. We use strong encryption and authentication to ensure your personal information and vehicle data remain safe and are not misused by third parties.",
     },
   ];
 
@@ -50,8 +48,8 @@ class _FaqPageState extends State<FaqPage> {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Color(0xFF232323), // atas
-              Color(0xFF000000), // bawah
+              Color(0xFF232323), // top
+              Color(0xFF000000), // bottom
             ],
           ),
         ),
